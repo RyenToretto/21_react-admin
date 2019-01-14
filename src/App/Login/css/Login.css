@@ -1,0 +1,17 @@
+.login_box {
+    width: 500px;
+    box-sizing: border-box;
+    padding: 50px 100px;
+    margin: 100px auto 0;
+    background-color: #c4cc99;
+    text-align: center;
+}
+
+.login_box img {
+    position: relative;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20%;
+    display: block;
+}
