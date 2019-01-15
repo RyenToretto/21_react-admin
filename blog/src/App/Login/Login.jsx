@@ -3,17 +3,27 @@ import React, { Component } from 'react';
 import {Form, Input, Icon, Button} from "antd";
 
 import "./css/Login.css";
-import logoPng from "./img/logo.png";
+import mePng from "./img/me.jpg";
 
 export default class Login extends Component {
     render(){
         return (
-            <div className="login_box">
-                <h2>
-                    <img src={logoPng} alt="登录 Logo"/>
-                    后台管理系统
-                </h2>
-                <WrappedLoginForm/>
+            <div id="login_outer">
+                <div id="holder_top">
+                    生于忧患
+                    <div id="die">死于安乐<hr id="die_line"/></div>
+                </div>
+                <div id="holder_bottom">
+                    我于黎明之中绽放
+                    <div id="jin">亦如杀戮中的花朵<hr id="jin_line"/></div>
+                </div>
+                <div className="login_box">
+                    <h2>
+                        <a href="https://www.baidu.com" target="_blank"><img src={mePng} alt="登录 Logo"/></a>
+                        管理员登录
+                    </h2>
+                    <WrappedLoginForm/>
+                </div>
             </div>
         )
     }
@@ -27,13 +37,12 @@ class OriginLogin_form extends Component {
         
         this.props.form.validateFields((error, values)=>{
             if(error){
-            
+                console.log("错错错错错错");
             }else{
                 console.log(userName+" ---- "+userPWD+" ---- 输入合法，可以进行 ajax 请求了")
             }
-            this.props.form.resetFields();    // 不传参，默认重置所有表单项
+            //this.props.form.resetFields();    // 不传参，默认重置所有表单项
         });
-        
     };
     
     // rule 是字段的描述
