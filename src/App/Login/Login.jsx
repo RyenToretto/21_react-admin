@@ -1,11 +1,26 @@
 import React, { Component } from 'react';
 
-import {Form, Input, Icon, Button} from "antd";
+import requestAPI from "../api/requestAPI";
+import {Form, Input, Icon, Button, message} from "antd";
 
 import "./css/Login.css";
 import logoPng from "./img/logo.png";
 
 export default class Login extends Component {
+    login = async (userName, userPWD)=>{
+        try{
+            const result = await requestAPI.login(userName, userPWD);
+            if(result.status === 0){
+                message.info("登录成功, 欢迎 "+userName);
+                this.props.history.replace("/admin");
+            }else{
+                message.info(result.msg);
+            }
+        }catch(e){
+            message.info(e);
+        }
+    };
+    
     render(){
         return (
             <div className="login_box">
@@ -13,7 +28,7 @@ export default class Login extends Component {
                     <img src={logoPng} alt="登录 Logo"/>
                     后台管理系统
                 </h2>
-                <WrappedLoginForm/>
+                <WrappedLoginForm login={this.login}/>
             </div>
         )
     }
@@ -25,20 +40,18 @@ class OriginLogin_form extends Component {
         const userName = this.props.form.getFieldValue("user_name");
         const userPWD = this.props.form.getFieldValue("user_password");
         
-        this.props.form.validateFields((error, values)=>{
+        this.props.form.validateFields(async (error, values)=>{
             if(error){
             
             }else{
-                console.log(userName+" ---- "+userPWD+" ---- 输入合法，可以进行 ajax 请求了")
+                this.props.login(userName, userPWD);
             }
             this.props.form.resetFields();    // 不传参，默认重置所有表单项
         });
-        
     };
     
     // rule 是字段的描述
     checkPassword = (rule, value, callback)=>{
-        console.log(rule);
         if(!value){
             callback("必须输入密码");
         }else if(value.length<4 || value.length>8){
