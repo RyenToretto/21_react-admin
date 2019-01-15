@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
-import requestAPI from "../api/requestAPI";
+import requestAPI from "../../api/requestAPI";
+import myLocalStorage from "../../tools/storeLocalStorage";
+import MyTools from "../../tools/MyTools"
 import {Form, Input, Icon, Button, message} from "antd";
 
 import "./css/Login.css";
@@ -8,10 +10,14 @@ import logoPng from "./img/logo.png";
 
 export default class Login extends Component {
     login = async (userName, userPWD)=>{
+        const USER_KEY = 'user_key';
         try{
             const result = await requestAPI.login(userName, userPWD);
             if(result.status === 0){
-                message.info("登录成功, 欢迎 "+userName);
+                myLocalStorage.local(USER_KEY, result.data);
+                MyTools.memory.user_key = result.data;    // 存入内存便于读
+                console.log(myLocalStorage.local(USER_KEY));
+                message.info("登录成功, "+userName+" 欢迎回来！");
                 this.props.history.replace("/admin");
             }else{
                 message.info(result.msg);

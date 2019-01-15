@@ -12,7 +12,8 @@
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-draft-wysiwyg": "^1.12.20",
-    "react-router-dom": "^4.3.1"
+    "react-router-dom": "^4.3.1",
+    "store": "^2.0.12"
   },
   "scripts": {
     "start": "react-app-rewired start",
