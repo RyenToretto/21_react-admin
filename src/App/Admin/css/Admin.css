@@ -1,0 +1,22 @@
+#admin_page {
+    width: 95%;
+    height: calc(100vh - 100px);
+    margin: 25px auto 0;
+    background-color: #e0e0c2;
+}
+
+.layout_box {
+    height: 100%;
+}
+
+.sider_box {
+    background-color: #598f72;
+}
+
+.header_box {
+    background-color: #93a286;
+}
+
+.contnet_box {
+    background-color: #929a9a;
+}

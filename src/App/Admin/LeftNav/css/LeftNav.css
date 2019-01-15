@@ -1,0 +1,11 @@
+#home_a {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#home_a #home_img {
+    width: 25%;
+    display: block;
+}
