@@ -5,6 +5,9 @@ import {BrowserRouter, Switch, Route} from "react-router-dom";
 import Login from "./Login/Login";
 import Admin from "./Admin/Admin";
 
+import "./css/base.css";
+import "./css/index.css";
+
 export default class App extends Component {
     render() {
         return (

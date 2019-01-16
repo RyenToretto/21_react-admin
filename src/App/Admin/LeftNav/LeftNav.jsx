@@ -51,15 +51,17 @@ class LeftNav extends Component {
     
     render(){
         const lastPath = this.props.location.pathname;
+        console.log(lastPath);
         return (
             <div className="left_nav">
-                <NavLink id="home_a" to="/admin">
+                <NavLink id="home_a" to="/admin/home">
                     <img id="home_img" src={theLogo} alt="Logo"/>
                     <h2>后台管理系统</h2>
                 </NavLink>
     
                 <Menu
-                    defaultSelectedKeys={lastPath}
+                    defaultSelectedKeys={[lastPath]}
+                    defaultOpenKeys={[lastPath]}
                     mode="inline"
                     theme="dark"
                 >
