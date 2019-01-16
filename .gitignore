@@ -2,9 +2,6 @@
 
 
 # dependencies
-react-dom.development.js
-*.css.map
-*.js.map
 DOC
 .idea
 /node_modules

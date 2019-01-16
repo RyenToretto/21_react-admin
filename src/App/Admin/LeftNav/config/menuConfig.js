@@ -1,4 +1,4 @@
-const menuList = [
+export const menuList = [
     {
         title: '首页', // 菜单标题名称
         key: '/admin/home', // 对应的path
@@ -11,12 +11,12 @@ const menuList = [
         children: [ // 子菜单列表
             {
                 title: '品类管理',
-                key: '/admin/category',
+                key: '/admin/products/category',
                 icon: 'bars'
             },
             {
                 title: '商品管理',
-                key: '/admin/product',
+                key: '/admin/products/product',
                 icon: 'tool'
             },
         ]
@@ -62,4 +62,28 @@ const menuList = [
     },
 ];
 
-export default menuList
+export function getCurKey(pathname, menu) {
+    let i=0;
+    
+    let result = {
+        preKey: null,
+        key: null
+    };
+    
+    for(i=0; i<menu.length; i++){
+        result.preKey = menu[i];
+        if(result.preKey.key === pathname){
+            result.key = menu[i];
+            return result;
+        }else if(menu[i].children){
+            let ret = getCurKey(pathname, menu[i].children);
+            if(ret && ret.key){
+                ret.preKey = menu[i];
+                return ret;
+            }
+        }
+    }
+    
+    return false;
+}
+

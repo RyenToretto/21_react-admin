@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import requestAPI from "../../api/requestAPI";
+import {requestLogin} from "../../api/requestAPI";
 import myLocalStorage from "../../tools/storeLocalStorage";
-import MyTools from "../../tools/MyTools"
+import storeMemory from "../../tools/storeMemory";
 import {Form, Input, Icon, Button, message} from "antd";
 
 import "./css/Login.css";
@@ -12,11 +12,10 @@ export default class Login extends Component {
     login = async (userName, userPWD)=>{
         const USER_KEY = 'user_key';
         try{
-            const result = await requestAPI.login(userName, userPWD);
+            const result = await requestLogin(userName, userPWD);
             if(result.status === 0){
                 myLocalStorage.local(USER_KEY, result.data);
-                MyTools.memory.user_key = result.data;    // 存入内存便于读
-                console.log(myLocalStorage.local(USER_KEY));
+                storeMemory.memory.user_key = result.data;    // 存入内存便于读
                 message.info("登录成功, "+userName+" 欢迎回来！");
                 this.props.history.replace("/admin");
             }else{
@@ -81,6 +80,7 @@ class OriginLogin_form extends Component {
                             ]
                         })(
                             <Input
+                                type="text"
                                 prefix={<Icon type="user" />}
                                 placeholder="请输入用户名"
                             />
@@ -96,6 +96,7 @@ class OriginLogin_form extends Component {
                             ]
                         })(
                             <Input
+                                type="password"
                                 prefix={<Icon type="lock" />}
                                 placeholder="请输入密码"
                             />
