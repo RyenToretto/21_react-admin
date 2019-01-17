@@ -83,7 +83,7 @@ export default class Admin extends Component {
                 <div id="admin_page">
                     <Layout className="layout_box">
                         
-                        <Sider className="sider_box" width="320px">
+                        <Sider className="sider_box" width="calc(24vw)">
                                 <LeftNav/>
                         </Sider>
                         

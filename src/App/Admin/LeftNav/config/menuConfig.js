@@ -74,16 +74,16 @@ export function getCurKey(pathname, menu) {
         result.preKey = menu[i];
         if(result.preKey.key === pathname){
             result.key = menu[i];
-            return result;
+            return result;    // 找到了就返回 result{preKey, key}
         }else if(menu[i].children){
-            let ret = getCurKey(pathname, menu[i].children);
+            let ret = getCurKey(pathname, menu[i].children);    // ret{preKey, key}
             if(ret && ret.key){
-                ret.preKey = menu[i];
-                return ret;
+                ret.preKey = menu[i];    // 更新 ret{preKey, key} 的 preKey
+                return ret;    // 返回正确的 ret{preKey, key}
             }
         }
     }
     
-    return false;
+    return false;    // 没找到返回 false
 }
 

@@ -6,9 +6,9 @@ export default(url, data={}, method="GET")=>{
         
         if(method === "GET"){
             // params 配置指定的是 query 参数
-            promiseAxios = axios.get(url, {params:data}, "GET");
+            promiseAxios = axios.get(url, {params:data});
         }else if(method === "POST"){
-            promiseAxios = axios.post(url, data, "POST");
+            promiseAxios = axios.post(url, data);
         }else{
             reject("ajax.js ---- method 传参错误");
         }
