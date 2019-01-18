@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 import {Card, Button, Icon, Table, message, Modal, Form, Input, Select} from "antd";
 import {requestAddClass, requestQueryClass, requestUpadteClass} from "../../../api/requestAPI";
@@ -20,7 +19,7 @@ export default class Category extends Component {
                 dataIndex: 'goods_id',
                 render: thisId => (
                     <div>
-                        <a href="javascript:" onClick={()=>this.setState({isShowUpdate: true})}>修改名称</a>
+                        <a href="javascript:" onClick={()=>this.setState({isShowUpdate: true, updateId: thisId})}>修改名称</a>
                         <a href="javascript:" onClick={()=>{this.handleQueryClass(thisId)}}>查看其子品类</a>
                     </div>
                 )
@@ -119,21 +118,17 @@ export default class Category extends Component {
         })
     };
     
-    handleUpdateClass = (thisId)=>{    /**************************************************************************/
+    handleUpdateClass = ()=>{
         this.setState({
             isShowUpdate: false
         });
-        const {newName} = this.updateForm.getFieldsValue();
-        console.log("------------------------------------");
-        console.log(thisId);
-        console.log("++++++++++++++++++++++++++++++++++++");
-        console.log(newName);
-        console.log("------------------------------------");
-        this.updateClass(thisId, newName);
+        const {newName} = this.updateForm.getFieldsValue();    // 获取 categroyName
+        const {updateId:thisId} = this.state;    // 获取 id
+        this.updateClass(thisId, newName);    // 请求修改品类名称
         
         const {dataSource} = this.state;
         dataSource.find((obj, index)=>{
-            if(obj.key === thisId){
+            if(obj.key === thisId){    // 更新页面对应的 categoryName
                 dataSource[index].goods_class = newName;
                 return true;
             }
@@ -198,8 +193,8 @@ export default class Category extends Component {
                     columns={columns}
                     bordered={true}
                     pagination={{    /* 前台分页 */
-                        defaultPageSize: 3,
-                        pageSizeOptions: ["2", "3", "4", "5"],
+                        defaultPageSize: 5,
+                        pageSizeOptions: ["2", "3", "4", "5", "6", "7", "8", "9", "10"],
                         showQuickJumper: true,
                         showSizeChanger: true
                     }}
