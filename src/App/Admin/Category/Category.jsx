@@ -226,6 +226,7 @@ export default class Category extends Component {
                     onCancel={()=>this.setState({isShowAdd:false})}
                     okText="提交修改"
                     cancelText="取消"
+                    destroyOnClose={true}
                 >
                     <WrappedAdd
                         dataSource={dataSource}
@@ -276,7 +277,7 @@ class AddForm extends Component{
                     {
                         getFieldDecorator("parentId", {
                             /* 会默认显示 value=0 的选项， 如果不写则不显示 */
-                            initialValue: 0    /* 一定要注意 number 的 0 和 字符串的 0 是不匹配的 */
+                            initialValue: classTitle.ids[classTitle.ids.length-1]    /* 一定要注意 number 的 0 和 字符串的 0 是不匹配的 */
                         })(
                             <Select>
                                 {
