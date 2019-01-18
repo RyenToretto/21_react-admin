@@ -18,7 +18,7 @@ export function requestWeather(city){
                 message.error("请求天气暂时不可用，请稍后刷新重试");
                 reject("请求天气暂时不可用，请稍后刷新重试");
             }else{
-                message.info("天气已更新");
+                message.success("天气已更新");
                 const {dayPictureUrl, weather} = response.results[0].weather_data[0];
                 resolve({dayPictureUrl, weather});
             }
@@ -42,4 +42,10 @@ export function requestUpadteClass(categoryId, categoryName) {
 export function requestQueryClass(parentId) {
     const url = "/manage/category/list";
     return ajax(url, {parentId}, "GET");
+}
+
+// pageNum pageSize ---- 获取商品分页列表
+export function requestGetProducts(pageNum, pageSize) {
+    const url = "/manage/product/list";
+    return ajax(url, {pageNum, pageSize}, "GET");
 }

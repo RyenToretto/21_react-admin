@@ -30,9 +30,14 @@
 
 .card_title_right_btn,
 .card_title_right_btn:focus,
-.card_title_right_btn:hover {
-    box-shadow: none;
+.card_title_right_btn:hover,
+.product_table tbody button,
+.product_table tbody button:focus,
+.product_table tbody button:hover {
+    margin: 0;
+    margin-left: 8px;
     
+    box-shadow: none;
     color: #fff;
     background-color: #1DA57A;
 }
