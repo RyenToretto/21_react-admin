@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {requestGetProducts} from "../../../../api/requestAPI"
+import {requestGetProducts, requestSearchProduct} from "../../../../api/requestAPI"
 import {Card, Button, Icon, Table, message, Modal, Form, Input, Select} from "antd";
 
 import "./css/ProductShow.css";
@@ -44,13 +44,21 @@ export default class ProductShow extends Component {
             dataSource: [],
             pageInfo: {},
             curPageSize: 3,
-            isLoading: false
+            isLoading: false,
+            searchType: "productName",
+            searchName: ""
         }
     }
     
     showProducts = async (pageNum, pageSize)=>{
         this.setState({isLoading: true});
-        const result = await requestGetProducts(pageNum, pageSize);
+        const {searchType, searchName} = this.state;
+        let result = false;
+        if(searchName){
+            result = await requestSearchProduct(pageNum, pageSize, searchType, searchName);
+        }else{
+            result = await requestGetProducts(pageNum, pageSize);
+        }
         this.setState({isLoading: false});
         if(result.status === 0){
             const {pageNum, pageSize, pages, total} = result.data;
@@ -69,32 +77,46 @@ export default class ProductShow extends Component {
                 })
             });
             
-            const {key} = result.data.list;
             this.setState({
                 dataSource,
                 pageInfo: {pageNum, pageSize, pages, total}
             })
         }else{
-            console.log(result);
             message.error("请求商品列表失败")
         }
     };
     
+    handleSearch = ()=>{
+        let {pageInfo, curPageSize} = this.state;
+        pageInfo.pageNum = 1;
+        this.setState({pageInfo});
+        this.showProducts(1, curPageSize)
+    };
+    
     componentDidMount(){
-        this.showProducts(1, this.state.curPageSize)
+        this.handleSearch()
     }
+    
     render(){
-        const {columns, dataSource, isLoading, pageInfo} = this.state;
+        const {columns, dataSource, isLoading, pageInfo, searchType} = this.state;
         const cardTitle = (
             <div className="card_title">
                 <div className="card_title_left">
-                    <Select className="good_search_way" defaultValue={1}>
-                        <Select.Option key={1} value={1}>根据商品名称</Select.Option>
-                        <Select.Option key={2} value={2}>根据商品描述</Select.Option>
-                        <Select.Option key={3} value={3}>3</Select.Option>
+                    <Select
+                        className="good_search_way"
+                        defaultValue={searchType}
+                        onChange={searchType=>this.setState({searchType})}
+                    >
+                        <Select.Option key="productName" value="productName">根据商品名称</Select.Option>
+                        <Select.Option key="productDesc" value="productDesc">根据商品描述</Select.Option>
                     </Select>
-                    <Input type="text" className="good_search_keyword" placeholder="请输入关键字"/>
-                    <Button className="good_search_btn">搜索</Button>
+                    <Input
+                        className="good_search_keyword"
+                        type="text"
+                        placeholder="请输入关键字"
+                        onChange={(e)=>this.setState({searchName: e.target.value})}
+                    />
+                    <Button className="good_search_btn" onClick={this.handleSearch}>搜索</Button>
                 </div>
                 <Button className="card_title_right_btn">
                     <Icon type="plus"/>
@@ -116,6 +138,7 @@ export default class ProductShow extends Component {
                     dataSource={dataSource}
                     bordered={true}
                     pagination={{
+                        current: pageInfo.pageNum,
                         showSizeChanger: true,
                         defaultPageSize: pageInfo.pageSize?pageInfo.pageSize:this.state.curPageSize,
                         pageSizeOptions: ["2", "3", "4", "5", "6", "7", "8", "9", "10"],

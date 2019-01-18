@@ -49,3 +49,10 @@ export function requestGetProducts(pageNum, pageSize) {
     const url = "/manage/product/list";
     return ajax(url, {pageNum, pageSize}, "GET");
 }
+
+// productDesc pageNum pageSize
+// productName pageNum pageSize ---- 搜索 获取到 产品分页列表
+export function requestSearchProduct(pageNum, pageSize, searchType, searchName) {
+    const url = "/manage/product/search";
+    return ajax(url, {pageNum, pageSize, [searchType]:searchName}, "GET");
+}
