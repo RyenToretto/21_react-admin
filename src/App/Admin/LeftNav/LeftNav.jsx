@@ -50,12 +50,16 @@ class LeftNav extends Component {
     }
     
     render(){
-        const curKey = this.props.location.pathname;
+        let curKey = this.props.location.pathname;
         let openKey = "/admin/home";
         const ret = getCurKey(curKey, menuList);
         if(ret && ret.preKey && ret.preKey.key){
             openKey = ret.preKey.key;
         }
+        if(ret.key){
+            curKey = ret.key?ret.key.key:"/admin/home";
+        }
+        
         return (
             <div className="left_nav">
                 <NavLink id="home_a" to="/admin/home">

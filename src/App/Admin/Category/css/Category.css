@@ -16,6 +16,10 @@
     font-weight: 700;
 }
 
+.category_card .ant-table-placeholder {
+    background-color: #49618f;
+}
+
 .category_table tbody tr:hover td {
     background-color: #237597 !important;
     transform: scale(1.1);
@@ -26,6 +30,19 @@
     text-align: center;
 }
 
+.category_table thead th {
+    background-color: #218765;
+    text-align: center;
+    font-size: 18px;
+}
+
+.category_table tbody {
+    font-size: 18px;
+    color: #000;
+    font-weight: 700;
+    background-color: #49618f;
+}
+
 .category_table .goods_info a {
     color: #bca490;
     text-decoration: none;
@@ -33,19 +50,6 @@
 
 .category_table .goods_info a:first-child {
     margin-right: 20px;
-}
-
-.category_table thead th{
-    background-color: #218765;
-    text-align: center;
-    font-size: 18px;
-}
-
-.category_table tbody{
-    font-size: 18px;
-    color: #000;
-    font-weight: 700;
-    background-color: #49618f;
 }
 
 .update_class_name button,

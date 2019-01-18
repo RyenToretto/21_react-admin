@@ -62,7 +62,7 @@ export const menuList = [
     },
 ];
 
-export function getCurKey(pathname, menu) {
+export function getCurKey(pathname, menu, deep=false) {
     let i=0;
     
     let result = {
@@ -72,7 +72,10 @@ export function getCurKey(pathname, menu) {
     
     for(i=0; i<menu.length; i++){
         result.preKey = menu[i];
-        if(result.preKey.key === pathname){
+        if(deep && pathname.indexOf(result.preKey.key) === 0){
+            result.key = menu[i];
+            return result;    // 找到了就返回 result{preKey, key}
+        }else if(!deep && result.preKey.key === pathname){
             result.key = menu[i];
             return result;    // 找到了就返回 result{preKey, key}
         }else if(menu[i].children){
@@ -84,6 +87,5 @@ export function getCurKey(pathname, menu) {
         }
     }
     
-    return false;    // 没找到返回 false
+    return deep?false:getCurKey(pathname, menu, true)
 }
-

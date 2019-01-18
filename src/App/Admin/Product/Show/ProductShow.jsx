@@ -22,8 +22,8 @@ export default class ProductShow extends Component {
                 dataIndex: 'product_price',
             }, {
                 title: '状态',
-                className: 'product_info',
-                dataIndex: 'product_info',
+                className: 'product_status',
+                dataIndex: 'product_status',
                 render: product => (
                     <div>
                         <Button>下架</Button>
@@ -46,6 +46,8 @@ export default class ProductShow extends Component {
     }
     
     render(){
+        const {columns, dataSource} = this.state;
+        
         const cardTitle = (
             <div className="card_title">
                 <div className="card_title_left">
@@ -66,16 +68,16 @@ export default class ProductShow extends Component {
         
         return (
             <Card
-                className="good_card"
+                className="product_show"
                 bordered={false}
                 title={cardTitle}
             >
-                {/*<Table*/}
-                    {/*columns={}*/}
-                    {/*dataSource={}*/}
-                    {/*className={}*/}
-                    {/*bordered={}*/}
-                {/*/>*/}
+                <Table
+                    columns={columns}
+                    dataSource={dataSource}
+                    className="product_table"
+                    bordered={true}
+                />
             </Card>
         )
     }
