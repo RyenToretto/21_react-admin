@@ -1,0 +1,38 @@
+.good_card {
+    width: 95%;
+    margin: 0 auto;
+    margin-top: 40px;
+    
+    background-color: #849277;
+}
+
+.card_title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+}
+
+.good_search_way {
+    width: 130px;
+}
+
+.good_search_keyword {
+    width: 200px;
+    margin-left: 20px;
+}
+
+.good_search_btn:focus,
+.good_search_btn {
+    color: #fff;
+    background-color: #1DA57A;
+}
+
+.card_title_right_btn,
+.card_title_right_btn:focus,
+.card_title_right_btn:hover {
+    box-shadow: none;
+    
+    color: #fff;
+    background-color: #1DA57A;
+}

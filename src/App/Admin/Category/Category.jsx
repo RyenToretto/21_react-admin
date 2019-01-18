@@ -34,7 +34,8 @@ export default class Category extends Component {
                 path: ["一级品类"]
             },
             isShowAdd: false,
-            isShowUpdate: false
+            isShowUpdate: false,
+            isLoading: true
         }
     }
     
@@ -66,6 +67,9 @@ export default class Category extends Component {
     
     queryClass = async (parentId)=>{
         try{
+            this.setState({
+                isLoading:true
+            });
             const result = await requestQueryClass(parentId);
             if(result.status === 0) {
                 let dataSource = result.data.map((each, index) => {
@@ -76,7 +80,8 @@ export default class Category extends Component {
                     }
                 });
                 this.setState({
-                    dataSource
+                    dataSource,
+                    isLoading:false
                 });
             }else{
                 message.error("Ajax queryClass 错误 :  "+result)
@@ -178,7 +183,7 @@ export default class Category extends Component {
     }
     
     render(){
-        const {dataSource, columns, classTitle, isShowUpdate, isShowAdd, goods_info} = this.state;
+        const {dataSource, columns, classTitle, isShowUpdate, isShowAdd, goods_info,isLoading} = this.state;
         const header = (
             <div className="category_title">
                 <div className="c_title">{this.showTitle(classTitle)}</div>
@@ -193,6 +198,7 @@ export default class Category extends Component {
             <Card className="category_card" title={header} bordered={false}>
                 <Table
                     className="category_table"
+                    loading={isLoading}
                     dataSource={dataSource}
                     columns={columns}
                     bordered={true}
