@@ -93,6 +93,13 @@ export default class ProductShow extends Component {
         this.showProducts(1, curPageSize)
     };
     
+    handleOnChange = (page, pageSize)=>{
+        this.showProducts(page, pageSize);
+        let {pageInfo} = this.state;
+        pageInfo.pageSize = pageSize;
+        this.setState({pageInfo, curPageSize: pageSize});
+    };
+    
     componentDidMount(){
         this.handleSearch()
     }
@@ -145,8 +152,8 @@ export default class ProductShow extends Component {
                         showQuickJumper: true,
                         total: pageInfo.total,
                         showTotal: (total=>"共 "+total+" 条数据"),
-                        onChange: (page, pageSize)=>this.showProducts(page, pageSize),
-                        onShowSizeChange: (page, pageSize)=>this.showProducts(page, pageSize)
+                        onChange: this.handleOnChange,
+                        onShowSizeChange: this.handleOnChange
                     }}
                 />
             </Card>
