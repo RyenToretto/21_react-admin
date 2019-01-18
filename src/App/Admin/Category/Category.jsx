@@ -15,16 +15,20 @@ export default class Category extends Component {
                 dataIndex: 'goods_class',
             }, {
                 title: '操作',
-                className: 'goods_id',
-                dataIndex: 'goods_id',
-                render: thisId => (
+                className: 'goods_info',
+                dataIndex: 'goods_info',
+                render: goods_info => (
                     <div>
-                        <a href="javascript:" onClick={()=>this.setState({isShowUpdate: true, updateId: thisId})}>修改名称</a>
-                        <a href="javascript:" onClick={()=>{this.handleQueryClass(thisId)}}>查看其子品类</a>
+                        <a href="javascript:" onClick={()=>this.setState({
+                            isShowUpdate: true,
+                            goods_info
+                        })}>修改名称</a>
+                        <a href="javascript:" onClick={()=>{this.handleQueryClass(goods_info.thisId)}}>查看其子品类</a>
                     </div>
                 )
             }],
             dataSource: [],
+            goods_info: {},
             classTitle: {
                 ids: [0],
                 path: ["一级品类"]
@@ -38,12 +42,12 @@ export default class Category extends Component {
         try{
             const result = await requestAddClass(parentId, categoryName);
             if(result.status === 0){
-                message.info("添加分类"+result.data.name+"成功")
+                message.success("添加分类 "+result.data.name+" 成功")
             }else{
-                message.error("Ajax addClass 错误: "+result)
+                message.error("Ajax addClass 错误 :  "+result)
             }
         }catch(e){
-            message.error("Ajax addClass 错误 catch: "+e)
+            message.error("Ajax addClass 错误 catch :  "+e)
         }
     };
     
@@ -51,12 +55,12 @@ export default class Category extends Component {
         try{
             const result = await requestUpadteClass(categoryId, categoryName);
             if(result.status === 0){
-                message.info("成功修改了品类名称");
+                message.success("成功修改了品类名称");
             }else{
-                message.error("Ajax updateClass 错误: "+result.msg)
+                message.error("Ajax updateClass 错误 :  "+result.msg)
             }
         }catch(e){
-            message.error("Ajax updateClass 错误 catch: "+e)
+            message.error("Ajax updateClass 错误 catch :  "+e)
         }
     };
     
@@ -68,17 +72,17 @@ export default class Category extends Component {
                     return {
                         key: each._id,
                         goods_class: each.name,
-                        goods_id: each._id
+                        goods_info: {thisId:each._id, thisName: each.name}
                     }
                 });
                 this.setState({
                     dataSource
                 });
             }else{
-                message.error("Ajax queryClass 错误: "+result)
+                message.error("Ajax queryClass 错误 :  "+result)
             }
         }catch(e){
-            message.error("Ajax queryClass 错误 catch: "+e)
+            message.error("Ajax queryClass 错误 catch :  "+e)
         }
     };
     
@@ -123,7 +127,7 @@ export default class Category extends Component {
             isShowUpdate: false
         });
         const {newName} = this.updateForm.getFieldsValue();    // 获取 categroyName
-        const {updateId:thisId} = this.state;    // 获取 id
+        const {thisId} = this.state.goods_info;    // 获取 id
         this.updateClass(thisId, newName);    // 请求修改品类名称
         
         const {dataSource} = this.state;
@@ -174,7 +178,7 @@ export default class Category extends Component {
     }
     
     render(){
-        const {dataSource, columns, classTitle, isShowUpdate, isShowAdd} = this.state;
+        const {dataSource, columns, classTitle, isShowUpdate, isShowAdd, goods_info} = this.state;
         const header = (
             <div className="category_title">
                 <div className="c_title">{this.showTitle(classTitle)}</div>
@@ -208,7 +212,10 @@ export default class Category extends Component {
                     okText="提交修改"
                     cancelText="取消"
                 >
-                    <WrappedUpdate setUpdateForm={form=>this.updateForm=form} />
+                    <WrappedUpdate
+                        setUpdateForm={form=>this.updateForm=form}
+                        thisName={goods_info.thisName}
+                    />
                 </Modal>
                 <Modal
                     className="add_class"
@@ -237,12 +244,13 @@ class UpdateForm extends Component{
     
     render(){
         const {getFieldDecorator} = this.props.form;
+        const {thisName} = this.props;
         return(
             <Form>
                 <Form.Item>
                     {
                         getFieldDecorator("newName", {
-                            initialValue: ""
+                            initialValue: thisName
                         })(
                             <Input type="text" placeholder="请输入分类的新名称" />
                         )

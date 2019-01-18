@@ -26,12 +26,12 @@
     text-align: center;
 }
 
-.category_table .goods_id a {
+.category_table .goods_info a {
     color: #bca490;
     text-decoration: none;
 }
 
-.category_table .goods_id a:first-child {
+.category_table .goods_info a:first-child {
     margin-right: 20px;
 }
 
