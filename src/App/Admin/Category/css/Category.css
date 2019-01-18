@@ -47,3 +47,13 @@
     font-weight: 700;
     background-color: #49618f;
 }
+
+.update_class_name button,
+.update_class_name button:hover,
+.add_class button,
+.add_class button:hover {
+    margin: 0;
+    margin-left: 8px;
+    box-shadow: none;
+    transform: none;
+}

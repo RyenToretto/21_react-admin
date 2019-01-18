@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import {Card, Button, Icon, Table, message, Modal} from "antd";
+import {Card, Button, Icon, Table, message, Modal, Form, Input, Select} from "antd";
 import {requestAddClass, requestQueryClass, requestUpadteClass} from "../../../api/requestAPI";
 
 import "./css/Category.css";
@@ -19,7 +20,7 @@ export default class Category extends Component {
                 dataIndex: 'goods_id',
                 render: thisId => (
                     <div>
-                        <a href="javascript:" onClick={()=>{this.handleUpdateClass(thisId)}}>修改名称</a>
+                        <a href="javascript:" onClick={()=>this.setState({isShowUpdate: true})}>修改名称</a>
                         <a href="javascript:" onClick={()=>{this.handleQueryClass(thisId)}}>查看其子品类</a>
                     </div>
                 )
@@ -28,7 +29,9 @@ export default class Category extends Component {
             classTitle: {
                 ids: [0],
                 path: ["一级品类"]
-            }
+            },
+            isShowAdd: false,
+            isShowUpdate: false
         }
     }
     
@@ -36,7 +39,7 @@ export default class Category extends Component {
         try{
             const result = await requestAddClass(parentId, categoryName);
             if(result.status === 0){
-                console.log(result.data);
+                message.info("添加分类"+result.data.name+"成功")
             }else{
                 message.error("Ajax addClass 错误: "+result)
             }
@@ -51,7 +54,7 @@ export default class Category extends Component {
             if(result.status === 0){
                 message.info("成功修改了品类名称");
             }else{
-                message.error("Ajax updateClass 错误: "+result)
+                message.error("Ajax updateClass 错误: "+result.msg)
             }
         }catch(e){
             message.error("Ajax updateClass 错误 catch: "+e)
@@ -79,10 +82,6 @@ export default class Category extends Component {
             message.error("Ajax queryClass 错误 catch: "+e)
         }
     };
-    
-    componentDidMount(){
-        this.queryClass(0);
-    }
     
     handleQueryClass = (thisId)=>{
         let {classTitle, dataSource} = this.state;
@@ -121,10 +120,15 @@ export default class Category extends Component {
     };
     
     handleUpdateClass = (thisId)=>{    /**************************************************************************/
-        const newName = "娃哈哈";
-        Modal.confirm({
-            content: <input type="text"/>
+        this.setState({
+            isShowUpdate: false
         });
+        const {newName} = this.updateForm.getFieldsValue();
+        console.log("------------------------------------");
+        console.log(thisId);
+        console.log("++++++++++++++++++++++++++++++++++++");
+        console.log(newName);
+        console.log("------------------------------------");
         this.updateClass(thisId, newName);
         
         const {dataSource} = this.state;
@@ -139,6 +143,18 @@ export default class Category extends Component {
         this.setState({
             dataSource
         })
+    };
+    
+    handleAddClass = ()=>{
+        this.setState({isShowAdd: false});    // 隐藏对话框
+        
+        // 添加分类
+        const {parentId, newName} = this.addForm.getFieldsValue();
+        this.addClass(parentId, newName);
+        
+        // 更新页面相关信息
+        const {classTitle} = this.state;
+        this.queryClass(classTitle.ids[classTitle.ids.length-1]);
     };
     
     showTitle = (classTitle)=>{
@@ -158,12 +174,17 @@ export default class Category extends Component {
         )
     };
     
+    componentDidMount(){
+        this.queryClass(0);
+    }
+    
     render(){
-        const {dataSource, columns, classTitle} = this.state;
+        const {dataSource, columns, classTitle, isShowUpdate, isShowAdd} = this.state;
         const header = (
             <div className="category_title">
                 <div className="c_title">{this.showTitle(classTitle)}</div>
-                <Button className="add_class_btn">
+                {/* 1. 点击显示对话框 */}
+                <Button className="add_class_btn" onClick={()=>{this.setState({isShowAdd: true})}}>
                     <Icon type="plus"/>
                     添加品类
                 </Button>
@@ -183,7 +204,113 @@ export default class Category extends Component {
                         showSizeChanger: true
                     }}
                 />
+                <Modal
+                    className="update_class_name"
+                    title="修改品类名称"
+                    visible={isShowUpdate}
+                    onOk={this.handleUpdateClass}    /* Id 怎么传？？ */
+                    onCancel={()=>this.setState({isShowUpdate:false})}
+                    okText="提交修改"
+                    cancelText="取消"
+                >
+                    <WrappedUpdate setUpdateForm={form=>this.updateForm=form} />
+                </Modal>
+                <Modal
+                    className="add_class"
+                    title="添加分类"
+                    visible={isShowAdd}
+                    onOk={this.handleAddClass}    /* 2. 点击 ok 进行添加 */
+                    onCancel={()=>this.setState({isShowAdd:false})}
+                    okText="提交修改"
+                    cancelText="取消"
+                >
+                    <WrappedAdd
+                        dataSource={dataSource}
+                        classTitle={classTitle}
+                        setAddForm={form=>this.addForm=form}    // 获取到子组件的 form，从而获取 id 和 name
+                    />
+                </Modal>
             </Card>
         )
     }
 }
+
+class UpdateForm extends Component{
+    componentWillMount(){
+        this.props.setUpdateForm(this.props.form)    // 将 子组件的 form 传给 父组件的 this.form
+    }
+    
+    render(){
+        const {getFieldDecorator} = this.props.form;
+        return(
+            <Form>
+                <Form.Item>
+                    {
+                        getFieldDecorator("newName", {
+                            initialValue: ""
+                        })(
+                            <Input type="text" placeholder="请输入分类的新名称" />
+                        )
+                    }
+                </Form.Item>
+            </Form>
+        )
+    }
+}
+
+class AddForm extends Component{
+    componentWillMount(){
+        this.props.setAddForm(this.props.form)    // 将 子组件的 form 传给 父组件的 this.form
+    }
+    
+    render(){
+        const {getFieldDecorator} = this.props.form;
+        const {dataSource, classTitle} = this.props;
+        return(
+            <Form>
+                <Form.Item label="所属分类：">
+                    {
+                        getFieldDecorator("parentId", {
+                            initialValue: "0"    /* 会默认显示 key=0 的选项， 如果不写则不显示 */
+                        })(
+                            <Select>
+                                {
+                                    classTitle.path.map((each, index)=>{
+                                        return(
+                                            <Select.Option
+                                                key={classTitle.ids[index]}
+                                                value={classTitle.ids[index]}
+                                            >{each}</Select.Option>
+                                        )
+                                    })
+                                }
+                                {
+                                    dataSource.map(each=>{
+                                        return(
+                                            <Select.Option
+                                                key={each.key}
+                                                value={each.key}
+                                            >{each.goods_class}</Select.Option>
+                                        )
+                                    })
+                                }
+                            </Select>
+                        )
+                    }
+                </Form.Item>
+                <Form.Item label="所属分类：">
+                    {
+                        getFieldDecorator("newName", {
+                            initialValue: ""    /* 初始值为空串 */
+                        })(
+                            <Input type="text" placeholder="请输入新分类的名称" />
+                        )
+                    }
+                </Form.Item>
+            </Form>
+        )
+    }
+}
+
+const WrappedAdd = Form.create()(AddForm);
+const WrappedUpdate = Form.create()(UpdateForm);
