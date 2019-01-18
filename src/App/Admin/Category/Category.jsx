@@ -211,6 +211,7 @@ export default class Category extends Component {
                     onCancel={()=>this.setState({isShowUpdate:false})}
                     okText="提交修改"
                     cancelText="取消"
+                    destroyOnClose={true}
                 >
                     <WrappedUpdate
                         setUpdateForm={form=>this.updateForm=form}
@@ -274,7 +275,8 @@ class AddForm extends Component{
                 <Form.Item label="所属分类：">
                     {
                         getFieldDecorator("parentId", {
-                            initialValue: "0"    /* 会默认显示 key=0 的选项， 如果不写则不显示 */
+                            /* 会默认显示 value=0 的选项， 如果不写则不显示 */
+                            initialValue: 0    /* 一定要注意 number 的 0 和 字符串的 0 是不匹配的 */
                         })(
                             <Select>
                                 {
