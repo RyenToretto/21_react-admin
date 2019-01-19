@@ -158,7 +158,10 @@ export default class Category extends Component {
         
         // 更新页面相关信息
         const {classTitle} = this.state;
-        this.queryClass(classTitle.ids[classTitle.ids.length-1]);
+        const curId = classTitle.ids[classTitle.ids.length-1];
+        if(curId === parentId){    // 优化： 不进行没有必要的刷新
+            this.queryClass(curId);
+        }
     };
     
     showTitle = (classTitle)=>{
