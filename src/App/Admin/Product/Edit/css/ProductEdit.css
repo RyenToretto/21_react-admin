@@ -2,7 +2,13 @@
     width: 95%;
     margin: 0 auto;
     margin-top: 40px;
+    box-sizing: border-box;
+    padding: 10px 48px 0 60px;
     
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    color: #000000;
     background-color: #849277;
 }
 
@@ -17,4 +23,59 @@
     font-size: 48px;
     color: #94b5b2;
     margin-right: 16px;
+}
+
+.product_edit .product_info_box{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 48px 24px 48px ;
+    background-color: #93a286;
+}
+
+.product_edit .product_info_box>div {
+    width: 100%;
+    padding-top: 24px;
+}
+
+.product_edit .product_info_box .edit_product_name,
+.product_edit .product_info_box .edit_product_desc {
+    width: 50%;
+}
+
+.product_edit .product_info_box .edit_product_category {
+    width: 20%;
+    min-width: 60px;
+    margin-right: 20px;
+    
+    font-weight: 700;
+    color: #bfffe0;
+    background-color: #849277;
+}
+
+.product_edit .product_info_box .edit_product_category {
+    width: 20%;
+    margin-right: 20px;
+    min-width: 60px;
+}
+
+.product_edit .product_info_box .ant-select-selection {
+    
+    font-weight: 700;
+    color: #bfffe0;
+    background-color: #849277;
+}
+
+.product_edit .product_info_box .edit_product_price .ant-input-group-wrapper {
+    width: 20%;
+}
+
+.product_edit input {
+    min-width: 60px;
+    font-weight: 700;
+    color: #bfffe0;
+    background-color: #849277;
+}
+
+.product_edit .product_info_box .edit_product_price .ant-input-group-addon {
+    background-color: #bfffe0;
 }

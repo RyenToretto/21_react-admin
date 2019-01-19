@@ -93,16 +93,6 @@ export default class ProductShow extends Component {
         }
     };
     
-    handleProductStatus = async (productId, status)=>{
-        const result = await requestProductStatus(productId, status===1?2:1);
-        if(result.status === 0){
-            const {pageInfo, curPageSize} = this.state;
-            this.showProducts(pageInfo.pageNum, curPageSize);
-        }else{
-            message.error("请求失败，请稍后再试")
-        }
-    };
-    
     handleOnChange = (page, pageSize)=>{
         this.showProducts(page, pageSize);
         let {pageInfo} = this.state;
@@ -128,6 +118,16 @@ export default class ProductShow extends Component {
             curPageSize
         });
         this.showProducts(pageInfo.pageNum, curPageSize)
+    };
+    
+    handleProductStatus = async (productId, status)=>{
+        const result = await requestProductStatus(productId, status===1?2:1);
+        if(result.status === 0){
+            const {pageInfo, curPageSize} = this.state;
+            this.showProducts(pageInfo.pageNum, curPageSize);
+        }else{
+            message.error("请求失败，请稍后再试")
+        }
     };
     
     toProductEdit = (product)=>{    // 保存 pageNum、pageSize
