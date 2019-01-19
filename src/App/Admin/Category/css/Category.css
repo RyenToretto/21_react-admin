@@ -33,12 +33,13 @@
 .category_table thead th {
     background-color: #218765;
     text-align: center;
+    color: #fff;
     font-size: 18px;
 }
 
 .category_table tbody {
     font-size: 18px;
-    color: #000;
+    color: #fff;
     font-weight: 700;
     background-color: #49618f;
 }

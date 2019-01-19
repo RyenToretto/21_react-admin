@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 
-import {requestGetProducts, requestSearchProduct} from "../../../../api/requestAPI"
+import {
+    requestGetProducts,
+    requestSearchProduct,
+    requestProductStatus
+} from "../../../../api/requestAPI";
+
 import {Card, Button, Icon, Table, message, Modal, Form, Input, Select} from "antd";
 
 import "./css/ProductShow.css";
@@ -25,16 +30,16 @@ export default class ProductShow extends Component {
                 title: '状态',
                 className: 'product_status',
                 dataIndex: 'status',
-                render: status => (
+                render: (status, product)=>(
                     <div>
-                        <Button>下架</Button>
-                        <span>在售</span>
+                        <Button onClick={()=>this.handleProductStatus(product.key, status)}>{status===1?"下架":"上架"}</Button>
+                        <span className="status_span">{status===1?"在售":"已下架"}</span>
                     </div>
                 )
             }, {
                 title: '操作',
                 className: 'product_manage',
-                render: product => (
+                render: product=>(
                     <div>
                         <Button>详情</Button>
                         <Button>修改</Button>
@@ -86,6 +91,24 @@ export default class ProductShow extends Component {
         }
     };
     
+    handleProductStatus = async (productId, status)=>{
+        const result = await requestProductStatus(productId, status===1?2:1);
+        if(result.status === 0){
+            const {pageInfo, curPageSize} = this.state;
+            this.showProducts(pageInfo.pageNum, curPageSize);
+        }else{
+            message.error("请求失败，请稍后再试")
+        }
+    };
+    
+    handleOnChange = (page, pageSize)=>{
+        this.showProducts(page, pageSize);
+        let {pageInfo} = this.state;
+        pageInfo.pageNum = page;
+        pageInfo.pageSize = pageSize;
+        this.setState({pageInfo, curPageSize: pageSize});
+    };
+    
     handleSearch = ()=>{
         let {pageInfo, curPageSize} = this.state;
         pageInfo.pageNum = 1;
@@ -93,11 +116,8 @@ export default class ProductShow extends Component {
         this.showProducts(1, curPageSize)
     };
     
-    handleOnChange = (page, pageSize)=>{
-        this.showProducts(page, pageSize);
-        let {pageInfo} = this.state;
-        pageInfo.pageSize = pageSize;
-        this.setState({pageInfo, curPageSize: pageSize});
+    toEidtPage = ()=>{
+    
     };
     
     componentDidMount(){
@@ -125,7 +145,7 @@ export default class ProductShow extends Component {
                     />
                     <Button className="good_search_btn" onClick={this.handleSearch}>搜索</Button>
                 </div>
-                <Button className="card_title_right_btn">
+                <Button className="card_title_right_btn" onClick={this.toEidtPage}>
                     <Icon type="plus"/>
                     添加产品
                 </Button>

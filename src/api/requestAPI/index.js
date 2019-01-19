@@ -56,3 +56,9 @@ export function requestSearchProduct(pageNum, pageSize, searchType, searchName) 
     const url = "/manage/product/search";
     return ajax(url, {pageNum, pageSize, [searchType]:searchName}, "GET");
 }
+
+// productId, status ---- 更新商品状态(上架/下架)
+export function requestProductStatus(productId, status) {
+    const url = "/manage/product/updateStatus";
+    return ajax(url, {productId, status}, "POST");
+}
