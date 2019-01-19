@@ -50,7 +50,7 @@ export default class ProductShow extends Component {
             }],
             dataSource: [],
             pageInfo: {},
-            curPageSize: 3,
+            curPageSize: myMemory.memory.product.pageSize,
             isLoading: false,
             searchType: "productName",
             searchName: ""
@@ -116,16 +116,23 @@ export default class ProductShow extends Component {
         if(!pageInfo.pageNum){
             pageInfo.pageNum = 1;
         }
-        if(myMemory.memory.product.pageNum){    // 是从其他页面回来的，取原来的页码
+        if(myMemory.memory.product.pageNum){    // 是从其他页面回来的，取原来的 页码、页大小
             pageInfo.pageNum = myMemory.memory.product.pageNum;
+            curPageSize = myMemory.memory.product.pageSize;
+            pageInfo.pageSize = curPageSize;
+            
             myMemory.memory.product.pageNum = false;
         }
-        this.setState({pageInfo});
+        this.setState({
+            pageInfo,
+            curPageSize
+        });
         this.showProducts(pageInfo.pageNum, curPageSize)
     };
     
-    toProductEdit = (product)=>{    // 保存页码
+    toProductEdit = (product)=>{    // 保存 pageNum、pageSize
         myMemory.memory.product.pageNum = this.state.pageInfo.pageNum;
+        myMemory.memory.product.pageSize = this.state.curPageSize;
         this.props.history.push("/admin/products/product/edit", product);
     };
     
@@ -179,7 +186,7 @@ export default class ProductShow extends Component {
                     pagination={{
                         current: pageInfo.pageNum,
                         showSizeChanger: true,
-                        defaultPageSize: pageInfo.pageSize?pageInfo.pageSize:this.state.curPageSize,
+                        defaultPageSize: pageInfo.pageSize || this.state.curPageSize,
                         pageSizeOptions: ["2", "3", "4", "5", "6", "7", "8", "9", "10"],
                         showQuickJumper: true,
                         total: pageInfo.total,
