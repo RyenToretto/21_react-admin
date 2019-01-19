@@ -1,0 +1,20 @@
+.product_edit {
+    width: 95%;
+    margin: 0 auto;
+    margin-top: 40px;
+    
+    background-color: #849277;
+}
+
+.product_nav {
+    font-size: 24px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+}
+
+.product_nav a {
+    font-size: 48px;
+    color: #94b5b2;
+    margin-right: 16px;
+}

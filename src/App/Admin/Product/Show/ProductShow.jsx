@@ -8,6 +8,8 @@ import {
 
 import {Card, Button, Icon, Table, message, Modal, Form, Input, Select} from "antd";
 
+import myMemory from "../../../../tools/storeMemory";
+
 import "./css/ProductShow.css";
 
 export default class ProductShow extends Component {
@@ -42,7 +44,7 @@ export default class ProductShow extends Component {
                 render: product=>(
                     <div>
                         <Button>详情</Button>
-                        <Button>修改</Button>
+                        <Button onClick={()=>this.toProductEdit(product)}>修改</Button>
                     </div>
                 )
             }],
@@ -111,13 +113,20 @@ export default class ProductShow extends Component {
     
     handleSearch = ()=>{
         let {pageInfo, curPageSize} = this.state;
-        pageInfo.pageNum = 1;
+        if(!pageInfo.pageNum){
+            pageInfo.pageNum = 1;
+        }
+        if(myMemory.memory.product.pageNum){    // 是从其他页面回来的，取原来的页码
+            pageInfo.pageNum = myMemory.memory.product.pageNum;
+            myMemory.memory.product.pageNum = false;
+        }
         this.setState({pageInfo});
-        this.showProducts(1, curPageSize)
+        this.showProducts(pageInfo.pageNum, curPageSize)
     };
     
-    toEidtPage = ()=>{
-    
+    toProductEdit = (product)=>{    // 保存页码
+        myMemory.memory.product.pageNum = this.state.pageInfo.pageNum;
+        this.props.history.push("/admin/products/product/edit", product);
     };
     
     componentDidMount(){
@@ -145,7 +154,10 @@ export default class ProductShow extends Component {
                     />
                     <Button className="good_search_btn" onClick={this.handleSearch}>搜索</Button>
                 </div>
-                <Button className="card_title_right_btn" onClick={this.toEidtPage}>
+                <Button
+                    className="card_title_right_btn"
+                    onClick={()=>this.toProductEdit({})}
+                >
                     <Icon type="plus"/>
                     添加产品
                 </Button>
