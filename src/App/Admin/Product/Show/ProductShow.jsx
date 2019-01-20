@@ -43,8 +43,8 @@ export default class ProductShow extends Component {
                 className: 'product_manage',
                 render: product=>(
                     <div>
-                        <Button>详情</Button>
-                        <Button onClick={()=>this.toProductEdit(product)}>修改</Button>
+                        <Button onClick={()=>this.toProductOf("detail", product)}>详情</Button>
+                        <Button onClick={()=>this.toProductOf("edit", product)}>修改</Button>
                     </div>
                 )
             }],
@@ -101,9 +101,9 @@ export default class ProductShow extends Component {
         this.setState({pageInfo, curPageSize: pageSize});
     };
     
-    handleSearch = ()=>{
+    handleSearch = (e)=>{
         let {pageInfo, curPageSize} = this.state;
-        if(!pageInfo.pageNum){
+        if(e || !pageInfo.pageNum){    // 如果 e 存在，说明是 搜索 btn，则 1
             pageInfo.pageNum = 1;
         }
         if(myMemory.memory.product.pageNum){    // 是从其他页面回来的，取原来的 页码、页大小
@@ -130,10 +130,10 @@ export default class ProductShow extends Component {
         }
     };
     
-    toProductEdit = (product)=>{    // 保存 pageNum、pageSize
+    toProductOf = (path, product)=>{    // 保存 pageNum、pageSize
         myMemory.memory.product.pageNum = this.state.pageInfo.pageNum;
         myMemory.memory.product.pageSize = this.state.curPageSize;
-        this.props.history.push("/admin/products/product/edit", product);
+        this.props.history.push("/admin/products/product/"+path, product);
     };
     
     componentDidMount(){
@@ -163,7 +163,7 @@ export default class ProductShow extends Component {
                 </div>
                 <Button
                     className="card_title_right_btn"
-                    onClick={()=>this.toProductEdit({})}
+                    onClick={()=>this.toProductOf("edit", {})}
                 >
                     <Icon type="plus"/>
                     添加产品
