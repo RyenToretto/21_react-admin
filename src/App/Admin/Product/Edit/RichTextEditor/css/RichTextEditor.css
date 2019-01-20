@@ -1,0 +1,21 @@
+.product_edit  .rdw-dropdown-selectedtext{
+    min-width: 54px;
+    
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+.rdw-editor-toolbar {
+    margin-bottom: 0;
+}
+
+.demo-editor {
+    height: 120px;
+    padding: 4px;
+    
+    font-size: 14px;
+    line-height: 1.2em;
+    letter-spacing: 0;
+    background-color: #74878f;
+}

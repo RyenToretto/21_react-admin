@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import {Icon, Input, Select, Button, message, Modal, Card, Table, Form} from "antd";
 import {requestQueryClass} from "../../../../api/requestAPI";
 
+import RichTextEditor from "./RichTextEditor/RichTextEditor";
+
 import "./css/ProductEdit.css";
 
 export default class ProductEdit extends Component {
@@ -78,11 +80,19 @@ export default class ProductEdit extends Component {
         this.setState({product, subChioce: categoryId});
     };
     
+    commitBtn = ()=>{
+        let {product} = this.state;
+        product.detail = this.refs.RichTextEditor.getRichTextEditor();
+        
+        console.log(product);
+    };
+    
     componentWillMount(){
-        const product = this.props.location.state;
+        let product = this.props.location.state;
         let isAdd = true;
         let subChioce = "未选择";
         if(product.key){
+            product._id = product.key;
             isAdd = false;
             subChioce = product.categoryId;
             if(product.pCategoryId === "0"){
@@ -115,7 +125,8 @@ export default class ProductEdit extends Component {
                 </h3>
                 <div className="product_info_box">
                     <div>
-                        <label>商品名称：
+                        <label>
+                            <div className="product_detail_edit">商品名称：</div>
                             <Input
                                 className="edit_product_name"
                                 type="text"
@@ -125,7 +136,8 @@ export default class ProductEdit extends Component {
                         </label>
                     </div>
                     <div>
-                        <label>商品描述：
+                        <label>
+                            <div className="product_detail_edit">商品描述：</div>
                             <Input
                                 className="edit_product_desc"
                                 type="text"
@@ -135,7 +147,7 @@ export default class ProductEdit extends Component {
                         </label>
                     </div>
                     <div className="padding_zero">
-                        所属分类：
+                        <div className="product_detail_edit">所属分类：</div>
                         {category1.length>0?(
                                 <Select
                                     className="edit_product_category"
@@ -180,7 +192,8 @@ export default class ProductEdit extends Component {
                             ):null)}
                     </div>
                     <div>
-                        <label className="edit_product_price">商品价格：
+                        <label className="edit_product_price">
+                            <div className="product_detail_edit">商品价格：</div>
                             <Input
                                 type="text"
                                 addonAfter="元"
@@ -189,15 +202,21 @@ export default class ProductEdit extends Component {
                         </label>
                     </div>
                     <div>
-                        商品图片：
+                        <div className="product_detail_edit">商品图片：</div>
                             图图图图图
                     </div>
-                    <div>
-                        商品详情：
-                            666666666666666666666666
+                    <div className="rich_text_editor">
+                        <div className="product_detail_edit">商品详情：</div>
+                        <div><RichTextEditor ref="RichTextEditor" detail={product.detail}/></div>
                     </div>
                 </div>
-                <Button type="primary" className="product_commit_btn">提交</Button>
+                <Button
+                    type="primary"
+                    className="product_commit_btn"
+                    onClick={this.commitBtn}
+                >
+                    提交
+                </Button>
             </div>
         )
     }

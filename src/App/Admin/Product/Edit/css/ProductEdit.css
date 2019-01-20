@@ -35,6 +35,20 @@
 .product_edit .product_info_box>div {
     width: 100%;
     padding-top: 24px;
+    display: flex;
+}
+
+.product_edit .product_info_box label {
+    display: flex;
+}
+
+.product_edit .product_info_box .rich_text_editor {
+    width: 100%;
+    display: flex;
+}
+
+.product_edit .product_detail_edit{
+    min-width: 140px;
 }
 
 .product_edit .product_info_box .edit_product_name,
@@ -78,4 +92,10 @@
 
 .product_edit .product_info_box .edit_product_price .ant-input-group-addon {
     background-color: #bfffe0;
+}
+
+#root #admin_page .product_commit_btn{
+    margin: 28px 0;
+    box-shadow: none;
+    transform: none;
 }
