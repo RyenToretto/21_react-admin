@@ -1,0 +1,16 @@
+.image_com {
+    width: 100%;
+}
+
+.ant-modal .ant-modal-content .ant-modal-close,
+.ant-modal .ant-modal-content .ant-modal-close:hover,
+.ant-modal .ant-modal-content span {
+    transform: none;
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    border-radius: 50%;
+    box-shadow: none;
+    line-height: 24px;
+    background-color: #d9d9d9;
+}

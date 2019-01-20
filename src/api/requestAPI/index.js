@@ -62,3 +62,19 @@ export function requestProductStatus(productId, status) {
     const url = "/manage/product/updateStatus";
     return ajax(url, {productId, status}, "POST");
 }
+
+// name ---- 请求删除已上传的图片
+export function requestDeleteImg(name) {
+    const url = "/manage/img/delete";
+    return ajax(url, {name}, "POST");
+}
+
+export function requestCommitUpdate({_id, name, desc, categoryId, pCategoryId, price, imgs, detail}) {
+    let url = "";
+    if(_id){
+        url = "/manage/product/update";
+    }else{
+        url = "/manage/product/add";
+    }
+    return ajax(url, {_id, name, desc, categoryId, pCategoryId, price, imgs, detail}, "POST");
+}

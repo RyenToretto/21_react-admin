@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 
 import {Icon, Input, Select, Button, message, Modal, Card, Table, Form} from "antd";
-import {requestQueryClass} from "../../../../api/requestAPI";
+import {requestQueryClass, requestCommitUpdate} from "../../../../api/requestAPI";
 
 import RichTextEditor from "./RichTextEditor/RichTextEditor";
+import ImageCom from "./ImageCom/ImageCom";
 
 import "./css/ProductEdit.css";
 
@@ -80,11 +81,19 @@ export default class ProductEdit extends Component {
         this.setState({product, subChioce: categoryId});
     };
     
-    commitBtn = ()=>{
+    commitBtn = async ()=>{
         let {product} = this.state;
         product.detail = this.refs.RichTextEditor.getRichTextEditor();
-        
-        console.log(product);
+        product.imgs = this.refs.ImageCom.getImgs();
+        //const {name, desc, categoryId, pCategoryId, price, imgs, detail} = product;
+        const result = await requestCommitUpdate(product);
+        if(result.status === 0){
+            message.success("提交成功");
+            this.props.history.goBack();
+        }else{
+            console.log(result);
+            message.error("提交错误，请稍后重试")
+        }
     };
     
     componentWillMount(){
@@ -203,7 +212,7 @@ export default class ProductEdit extends Component {
                     </div>
                     <div>
                         <div className="product_detail_edit">商品图片：</div>
-                            图图图图图
+                        <ImageCom imgs={this.state.product.imgs} ref="ImageCom"/>
                     </div>
                     <div className="rich_text_editor">
                         <div className="product_detail_edit">商品详情：</div>
