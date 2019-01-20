@@ -5,6 +5,10 @@ import {Icon, message} from "antd";
 import "./css/ProductDetail.css";
 import {requestQueryClass} from "../../../../api/requestAPI";
 
+function preventScroll(e){
+    e.preventDefault();
+}
+
 export default class ProductDetail extends Component {
     constructor(props){
         super(props);
@@ -13,17 +17,34 @@ export default class ProductDetail extends Component {
             secondName: ""
         }
     }
-    /****
-         categoryId: "5c4139ac6943f01eb45bab60"
-         desc: "神级表情包"
-         detail: "<p>888</p>↵"
-         imgs: ["image-1547987050108.jpg"]
-         key: "5c44686a56f7d318a8cb98a2"
-         name: "切克闹"
-         pCategoryId: "5c401aabb8491a1b807fd9df"
-         price: 777
-         status: 1
-     ****/
+    
+    bigView = (e)=>{
+        let newDiv = document.createElement("div");
+        newDiv.id = "img"+Date.now();
+        e.target.bigId = newDiv.id;
+        
+        newDiv.style.position = "fixed";
+        newDiv.style.top = "0";
+        newDiv.style.left = "0";
+        newDiv.style.width = "100%";
+        newDiv.style.height = "100%";
+        newDiv.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+        newDiv.style.display = "flex";
+        newDiv.style.justifyContent = "center";
+        newDiv.style.alignItems = "center";
+        
+        let imgNode = e.target.cloneNode(true);
+        imgNode.style.maxHeight = "90%";
+        newDiv.appendChild(imgNode);
+        
+        document.body.appendChild(newDiv);
+    
+        document.body.addEventListener('mousewheel', preventScroll, false);
+        newDiv.onclick = function () {
+            document.body.removeChild(newDiv);
+            document.body.removeEventListener('mousewheel', preventScroll, false);
+        }
+    };
     
     async componentWillMount(){
         const {pCategoryId, categoryId} = this.props.location.state;
@@ -45,7 +66,6 @@ export default class ProductDetail extends Component {
         }else{
             message.error(46+": 请求错误，请稍后重试")
         }
-        console.log("componentWillMount :  "+firstName+"----"+secondName);
         
         this.setState({
             firstName,
@@ -56,8 +76,6 @@ export default class ProductDetail extends Component {
     render(){
         const {firstName, secondName} = this.state;
         const {name, desc, pCategoryId, price, imgs, detail} = this.props.location.state;
-        
-        console.log("render :  "+firstName+"----"+secondName);
         return (
             <div className="product_detail">
                 <h3 className="product_detail_nav">
@@ -89,7 +107,11 @@ export default class ProductDetail extends Component {
                     <div className="product_detail_img">
                         <div>商品图片：</div>
                         <div>{
-                            imgs.map((img, index)=><img key={index} src={"http://localhost:5000/upload/"+img} alt="商品 logo"/>)
+                            imgs.map((img, index)=><img
+                                key={index}
+                                src={"http://localhost:5000/upload/"+img}
+                                onClick={(e)=>this.bigView(e)}
+                                alt="商品 logo"/>)
                         }</div>
                     </div>
                     <div className="product_detail_content">
