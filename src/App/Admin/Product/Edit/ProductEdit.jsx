@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
-import {Icon, Card, Button, Table, message, Modal, Form, Input, Select} from "antd";
+import {Icon, Input, Select, Button, message, Modal, Card, Table, Form} from "antd";
+import {requestQueryClass} from "../../../../api/requestAPI";
 
 import "./css/ProductEdit.css";
 
@@ -9,50 +10,108 @@ export default class ProductEdit extends Component {
         super(props);
         this.state = {
             product: {},
-            theTitle: "添加商品"
+            isAdd: true,
+            subChioce: "未选择",
+            category1: [],
+            category2: []
         }
     }
     
+    getCategoryNames = async (categoryId)=>{
+        const result = await requestQueryClass(categoryId);
+        if(result.status === 0){
+            return result.data
+        }else{
+            message.error("请求 category 列表异常")
+        }
+    };
+    
+    deal0List = async ()=>{
+        const category1Arr = await this.getCategoryNames(0);
+        let category1 = category1Arr.map(each=>({
+            categoryId: each._id,
+            categoryName: each.name
+        }));
+        this.setState({
+            category1
+        });
+    };
+    
+    dealSubList = async (id)=>{
+        const category2Arr = await this.getCategoryNames(id);
+        let category2 = category2Arr.map(each=>({
+            categoryId: each._id,
+            categoryName: each.name
+        }));
+        
+        this.setState({
+            category2
+        });
+    };
+    
+    /***********************************************************/
     input2Product = (e, type)=>{
         const {product} = this.state;
         product[type] = e.target.value;
         this.setState({product});
     };
     
+    handle0Category = (parentId)=>{
+        let {product} = this.state;
+        product.pCategoryId = "0";
+        product.categoryId = parentId;
+        
+        this.setState({
+            product,
+            isAdd: false,
+            subChioce: "未选择",
+        });
+        this.dealSubList(parentId);
+    };
+    
+    handleSubCategory = (categoryId)=>{
+        let {product} = this.state;
+        if(product.pCategoryId === "0"){
+            product.pCategoryId = product.categoryId;
+        }
+        product.categoryId = categoryId;
+        this.setState({product, subChioce: categoryId});
+    };
+    
     componentWillMount(){
         const product = this.props.location.state;
-        let theTitle = "添加商品";
+        let isAdd = true;
+        let subChioce = "未选择";
         if(product.key){
-            theTitle = "编辑商品"
+            isAdd = false;
+            subChioce = product.categoryId;
+            if(product.pCategoryId === "0"){
+                subChioce = "未选择";
+            }
         }
         this.setState({
             product,
-            theTitle
+            isAdd,
+            subChioce
         })
     }
-    /****
-        key: "5c414dc66943f01eb45bab6b"
-        name: "吉普牛仔裤"
-        desc: "四季款"
-        pCategoryId: "5c3f11eec04a871c08734977"
-        categoryId: "5c401adfb8491a1b807fd9e3"
-        price: 99
-        imgs: ["image-1547783608353.jpg"]
-        detail: "<p>Handsome boy.</p>"
-        status: 1
-     ****/
-    render(){
-        const {product, theTitle} = this.state;
-        let isAdd = true;
-        if(product.key){
-            isAdd = false;
+    
+    componentDidMount(){
+        const {product, isAdd} = this.state;
+        this.deal0List();    // 获取为 0 的列表
+        if(!isAdd){ // 如果是 编辑商品
+            // 则还要获取 product.pCategoryId 的列表
+            this.dealSubList(product.pCategoryId);
         }
-        
+    }
+    
+    render(){
+        const {product, isAdd, subChioce, category1, category2} = this.state;
         return (
             <div className="product_edit">
                 <h3 className="product_nav">
                     <a href="javascript:" onClick={()=>{this.props.history.goBack()}}><Icon type="arrow-left"/></a>
-                    <span>{theTitle}</span>
+                    <span>{isAdd?"添加商品":"编辑商品"}</span>
                 </h3>
                 <div className="product_info_box">
                     <div>
@@ -79,24 +138,41 @@ export default class ProductEdit extends Component {
                         所属分类：
                         <Select
                             className="edit_product_category"
+                            onChange={this.handle0Category}
                             defaultValue={
                                 isAdd?"未选择":
                                     (product.pCategoryId==="0"?product.categoryId:
                                         product.pCategoryId)
                             }
                         >
-                            <Select.Option key="0" value="0">一级品类</Select.Option>
-                            <Select.Option key="2" value="2">2</Select.Option>
-                            <Select.Option key="3" value="3">3</Select.Option>
+                            {
+                                category1.map(each=>(
+                                    <Select.Option
+                                        key={each.categoryId}
+                                        value={each.categoryId}
+                                    >
+                                        {each.categoryName}
+                                    </Select.Option>
+                                ))
+                            }
                         </Select>
-                        {(isAdd || product.pCategoryId==="0")?null:(
+                        {isAdd?null:(
                             <Select
                                 className="edit_product_category"
-                                defaultValue={product.categoryId}
+                                onChange={this.handleSubCategory}
+                                defaultValue={subChioce}
+                                value={subChioce}
                             >
-                                <Select.Option key="a" value="0">不可能的 一级品类</Select.Option>
-                                <Select.Option key="b" value="b">b</Select.Option>
-                                <Select.Option key="c" value="c">c</Select.Option>
+                                {
+                                    category2.map(each=>(
+                                        <Select.Option
+                                            key={each.categoryId}
+                                            value={each.categoryId}
+                                        >
+                                            {each.categoryName}
+                                        </Select.Option>
+                                    ))
+                                }
                             </Select>
                         )}
                     </div>
