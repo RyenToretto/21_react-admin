@@ -125,6 +125,7 @@ export default class ProductShow extends Component {
         if(result.status === 0){
             const {pageInfo, curPageSize} = this.state;
             this.showProducts(pageInfo.pageNum, curPageSize);
+            message.success("修改商品状态成功")
         }else{
             message.error("请求失败，请稍后再试")
         }

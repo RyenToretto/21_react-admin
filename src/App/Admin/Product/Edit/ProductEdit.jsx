@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {Icon, Input, Select, Button, message, Modal, Card, Table, Form} from "antd";
+import {Icon, Input, Select, Button, message} from "antd";
 import {requestQueryClass, requestCommitUpdate} from "../../../../api/requestAPI";
 
 import RichTextEditor from "./RichTextEditor/RichTextEditor";
@@ -119,8 +119,12 @@ export default class ProductEdit extends Component {
         const {product, isAdd} = this.state;
         this.deal0List();    // 获取为 0 的列表
         if(!isAdd){ // 如果是 编辑商品
-            // 则还要获取 product.pCategoryId 的列表
-            this.dealSubList(product.pCategoryId);
+            // 则还要获取
+            if(product.pCategoryId === "0"){    // product.categoryId 的列表
+                this.dealSubList(product.categoryId);
+            }else{    // product.pCategoryId 的列表
+                this.dealSubList(product.pCategoryId);
+            }
         }
     }
     
