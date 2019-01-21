@@ -16,7 +16,7 @@ export default class ProductEdit extends Component {
             isAdd: true,
             subChioce: "未选择",
             category1: [],
-            category2: []
+            category2: [],
         }
     }
     
@@ -85,6 +85,8 @@ export default class ProductEdit extends Component {
         let {product} = this.state;
         product.detail = this.refs.RichTextEditor.getRichTextEditor();
         product.imgs = this.refs.ImageCom.getImgs();
+        
+        this.refs.ImageCom.handleCommit();
         //const {name, desc, categoryId, pCategoryId, price, imgs, detail} = product;
         const result = await requestCommitUpdate(product);
         if(result.status === 0){
@@ -94,6 +96,11 @@ export default class ProductEdit extends Component {
             console.log(result);
             message.error("提交错误，请稍后重试")
         }
+    };
+    
+    allReturn = ()=>{
+        this.props.history.goBack();
+        this.refs.ImageCom.handleReturn();
     };
     
     componentWillMount(){
@@ -133,7 +140,7 @@ export default class ProductEdit extends Component {
         return (
             <div className="product_edit">
                 <h3 className="product_nav">
-                    <a href="javascript:" onClick={()=>{this.props.history.goBack()}}><Icon type="arrow-left"/></a>
+                    <a href="javascript:" onClick={this.allReturn}><Icon type="arrow-left"/></a>
                     <span>{isAdd?"添加商品":"编辑商品"}</span>
                 </h3>
                 <div className="product_info_box">

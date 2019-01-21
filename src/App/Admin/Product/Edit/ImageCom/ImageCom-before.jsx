@@ -12,39 +12,15 @@ export default class ImageCom extends Component {
         previewImage: '',    // 大图的 url 地址
         
         /****    // 包含所有已上传图片信息对象的数组
-         {
+            {
                 name: 'xxx.png',    // 名称
                 // 指定大图预览的地址
                 url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
                 uid: '-1',    // 文档推荐 唯一的负数字符串 作为标识
                 status: 'done',    // 图片的状态： loading/done/remove删除
             }
-         ****/
+        ****/
         fileList: [],    // 编辑商品 时，要初始化 fileList
-        
-        needDelete: [],
-        reallyDelete: []
-    };
-    
-    handleReturn = ()=>{
-        const {needDelete} = this.state;
-        this.deleteManyImg(needDelete);    // 用户返回，则 ajax 删除 已经上传的图片
-    };
-    
-    handleCommit = ()=>{
-        const {reallyDelete} = this.state;
-        this.deleteManyImg(reallyDelete);    // 用户提交，则 ajax 删除 确定要删除的图片
-    };
-    
-    deleteManyImg = (names)=>{
-        names.forEach(async each=>{
-            const result = await requestDeleteImg(each);
-            if(result.status === 0){
-                // message.success("成功删除 "+each+" 图片")
-            }else{
-                // message.error("删除图片 "+each+" 失败")
-            }
-        });
     };
     
     getImgs = ()=>{    // 让父组件调，传递 imgs 数组
@@ -68,21 +44,22 @@ export default class ImageCom extends Component {
     // 详见 antd 文档： 上传图片以后的回调
     // loading 会出现很多次，会触发多次 onChange 事件
     handleChange = async ({ file, fileList }) =>{
-        let {needDelete, reallyDelete} = this.state;
         if(file.status === "done"){
             const {name, url} = file.response.data;
             file = fileList[fileList.length-1];    // file 和 fileList 不是同一个对象
             file.name = name;
             file.url = url;
-            needDelete.push(file.name);
             message.success("图片上传成功！");    // 上传到了 服务器的 public/upload 中
         }else if(file.status === "removed"){    // 删除图片
-            reallyDelete.push(file.name);    // 点击提交按钮，再删除
+            const result = await requestDeleteImg(file.name);    // 请求后台删除已上传的图片
+            if(result.status === 0){
+                message.success("成功删除后台图片")
+            }else{
+                message.error("删除后台图片失败")
+            }
         }
         this.setState({
-            fileList,
-            needDelete,
-            reallyDelete
+            fileList
         });
     };
     
