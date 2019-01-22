@@ -1,0 +1,41 @@
+.role_box_title button,
+.role_box_title button:hover {
+    box-shadow: none;
+    transform: none;
+}
+
+.role_card {
+    width: 95%;
+    margin: 0 auto;
+    margin-top: 40px;
+    background-color: #849277;
+}
+
+.role_card .role_table tbody{
+    font-size: 18px;
+    color: #fff;
+    font-weight: 700;
+    background-color: #49618f;
+}
+
+.role_card .role_table thead th {
+    background-color: #218765;
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+}
+
+.role_card .role_table tbody tr:hover td {
+    background-color: #237597 !important;
+    transform: scale(1.1);
+    text-shadow: 1px 1px 10px #a69571;
+}
+
+.ant-table-tbody > tr.ant-table-row-selected td {
+    background: #4399a2;
+}
+
+.role_card .ant-table-placeholder {
+    color: #fff;
+    background-color: #49618f;
+}

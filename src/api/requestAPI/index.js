@@ -69,6 +69,7 @@ export function requestDeleteImg(name) {
     return ajax(url, {name}, "POST");
 }
 
+// 商品的 提交 或者 修改
 export function requestCommitUpdate({_id, name, desc, categoryId, pCategoryId, price, imgs, detail}) {
     let url = "";
     if(_id){
@@ -77,4 +78,10 @@ export function requestCommitUpdate({_id, name, desc, categoryId, pCategoryId, p
         url = "/manage/product/add";
     }
     return ajax(url, {_id, name, desc, categoryId, pCategoryId, price, imgs, detail}, "POST");
+}
+
+// 请求获取 所有角色
+export function requestRoleList() {
+    const url = "/manage/role/list";
+    return ajax(url, "get");
 }

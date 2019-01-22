@@ -32,12 +32,6 @@ export const menuList = [
         key: '/admin/role',
         icon: 'safety',
     },
-    
-    {
-        title: '订单管理',
-        key: '/admin/order',
-        icon: 'safety',
-    },
     {
         title: '图形图表',
         key: '/admin/charts',

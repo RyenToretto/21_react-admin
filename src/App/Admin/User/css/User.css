@@ -1,0 +1,31 @@
+.user_box_title button,
+.user_box_title button:hover {
+    box-shadow: none;
+    transform: none;
+}
+
+.user_card {
+    width: 95%;
+    margin: 0 auto;
+    margin-top: 40px;
+    background-color: #849277;
+}
+
+.user_card .user_table tbody{
+    font-size: 18px;
+    color: #fff;
+    font-weight: 700;
+    background-color: #49618f;
+}
+
+.user_card .user_table thead th {
+    background-color: #218765;
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+}
+
+.user_card .ant-table-placeholder {
+    color: #fff;
+    background-color: #49618f;
+}
