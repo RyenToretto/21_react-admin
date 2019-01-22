@@ -39,3 +39,16 @@
     color: #fff;
     background-color: #49618f;
 }
+
+.role_modal .ant-modal-close-x {
+    margin: 0;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+}
+
+.auth_tree {
+    width: 200px;
+    min-height: 20px;
+    background-color: #998d68;
+}

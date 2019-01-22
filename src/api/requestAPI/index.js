@@ -69,7 +69,7 @@ export function requestDeleteImg(name) {
     return ajax(url, {name}, "POST");
 }
 
-// 商品的 提交 或者 修改
+// {...} 商品的 提交 或者 修改
 export function requestCommitUpdate({_id, name, desc, categoryId, pCategoryId, price, imgs, detail}) {
     let url = "";
     if(_id){
@@ -83,5 +83,17 @@ export function requestCommitUpdate({_id, name, desc, categoryId, pCategoryId, p
 // 请求获取 所有角色
 export function requestRoleList() {
     const url = "/manage/role/list";
-    return ajax(url, "get");
+    return ajax(url, "GET");
+}
+
+// roleName ---- 请求 创建角色
+export function requestRoleAdd(roleName) {
+    const url = "/manage/role/add";
+    return ajax(url, {roleName}, "POST");
+}
+
+// role:{...} ---- 请求 更新角色(给角色设置权限)
+export function requestRoleUpdate(role) {
+    const url = "/manage/role/update";
+    return ajax(url, role, "POST");
 }
