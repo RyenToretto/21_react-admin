@@ -73,7 +73,7 @@ export default class Admin extends Component {
         const user_key = storeMemory.memory.user_key;
         if(user_key && user_key._id){
             const ret = getCurKey(this.props.location.pathname, menuList);
-            let curKeyTitle = "/admin/home";
+            let curKeyTitle = "/home";
             if(ret && ret.key && ret.key.title){
                 curKeyTitle = ret.key.title;
             }
@@ -114,15 +114,15 @@ export default class Admin extends Component {
                             </Header>
                             <Content className="contnet_box">
                                 <Switch>
-                                    <Route path="/admin/home" component={Home}/>
-                                    <Route path='/admin/products/category' component={Category}/>
-                                    <Route path='/admin/products/product' component={Product}/>
-                                    <Route path='/admin/user' component={User}/>
-                                    <Route path='/admin/role' component={Role}/>
-                                    <Route path='/admin/charts/bar' component={Bar}/>
-                                    <Route path='/admin/charts/line' component={Line}/>
-                                    <Route path='/admin/charts/pie' component={Pie}/>
-                                    <Redirect to='/admin/home'/>
+                                    <Route path="/home" component={Home}/>
+                                    <Route path='/category' component={Category}/>
+                                    <Route path='/product' component={Product}/>
+                                    <Route path='/user' component={User}/>
+                                    <Route path='/role' component={Role}/>
+                                    <Route path='/charts/bar' component={Bar}/>
+                                    <Route path='/charts/line' component={Line}/>
+                                    <Route path='/charts/pie' component={Pie}/>
+                                    <Redirect to='/home'/>
                                 </Switch>
                             </Content>
                         </Layout>

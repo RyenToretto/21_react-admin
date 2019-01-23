@@ -78,11 +78,16 @@ export default class Role extends PureComponent {
         this.setState({
             isRoleAdd: false
         });
+        
         const {newRoleName} = this.addRoleForm.getFieldsValue();
+        
         const result = await requestRoleAdd(newRoleName);
         if(result.status === 0){
+            const dataSource = [...this.state.dataSource, result.data];
+            this.setState({
+                dataSource
+            });
             message.success("成功创建了一个新角色："+newRoleName);
-            this.getRoleList();
         }else{
             message.error("创建新角色失败，请稍后再试")
         }
@@ -93,37 +98,17 @@ export default class Role extends PureComponent {
     };
     
     handleUpdateRole = async ()=>{
-        let {curRole} = this.state;
         this.setState({isRoleConfig: false});
-        curRole.menus = [];
-        this.newConfig.forEach(each=>{
-            each = each.replace("/admin", "");
-            if(each==="/products"){
-                curRole.menus.push("/product");
-                curRole.menus.push("/category");
-            }else if(each==="/products/product"){
-                curRole.menus.push("/product");
-            }else if(each==="/products/category"){
-                curRole.menus.push("/category");
-            }else if(each==="/charts"){
-                curRole.menus.push("/charts/line");
-                curRole.menus.push("/charts/bar");
-                curRole.menus.push("/charts/pie");
-            }else{
-                curRole.menus.push(each);
-            }
-            
-        });
-        console.log(curRole);
+    
+        let {curRole} = this.state;
+        curRole.menus = this.newConfig;
         curRole.auth_name = myLocalStorage.local("user_key").username || 'admin';
         curRole.auth_time = Date.now();
+        
         const result = await requestRoleUpdate(curRole);
         if(result.status === 0){
-            message.success("角色权限设置已更新")
+            message.success("角色权限设置已更新");
         }else{
-            console.log(result);
-            console.log(curRole);
-            
             message.error("角色权限设置失败，请稍后重试");
         }
     };
@@ -142,19 +127,8 @@ export default class Role extends PureComponent {
             <h3 className="role_box_title">
                 <Button type="primary" onClick={()=>{this.setState({isRoleAdd: true})}}>创建角色</Button>
                 <Button type="primary" onClick={()=>{
-                    let myAuthPath = [];
-                    if(curRole.menus){
-                        myAuthPath = curRole.menus.map(each=>{
-                            if(each==="platform_all"){
-                                return "/admin/home";
-                            }else if(each==="/category" || each==="/product"){
-                                return "/admin/products"+each;
-                            }
-                            return "/admin"+each;
-                        });
-                    }
-                    this.newConfig = myAuthPath;
-                    this.setState({isRoleConfig: true, hadAuthPath: myAuthPath});
+                    this.newConfig = curRole.menus;
+                    this.setState({isRoleConfig: true, hadAuthPath: curRole.menus});
                 }}>
                     设置角色权限
                 </Button>
@@ -190,7 +164,7 @@ export default class Role extends PureComponent {
                     onRow={this.clickRow}
                     pagination={{
                         showSizeChanger: true,
-                        defaultPageSize: 3,
+                        defaultPageSize: 10,
                         pageSizeOptions: ["2", "3", "4", "5", "6", "7", "8", "9", "10"],
                         showQuickJumper: true
                     }}
@@ -218,7 +192,6 @@ export default class Role extends PureComponent {
                     <ConfigRoleForm
                         roleName={curRole.name}
                         hadAuthPath={hadAuthPath}
-                        ref="authConfig"
                         updateMenus = {this.updateMenus}
                     />
                 </Modal>
@@ -259,10 +232,6 @@ class ConfigRole extends PureComponent {
     state = {
         newConfig:[],
         oldConfig: []
-    };
-    
-    getAuthPath = ()=>{
-        return this.state.newConfig;
     };
     
     onChange = (value, label, extra)=>{

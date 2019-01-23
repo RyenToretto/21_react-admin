@@ -134,7 +134,7 @@ export default class ProductShow extends Component {
     toProductOf = (path, product)=>{    // 保存 pageNum、pageSize
         myMemory.memory.product.pageNum = this.state.pageInfo.pageNum;
         myMemory.memory.product.pageSize = this.state.curPageSize;
-        this.props.history.push("/admin/products/product/"+path, product);
+        this.props.history.push("/product/"+path, product);
     };
     
     componentDidMount(){

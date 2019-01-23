@@ -11,10 +11,10 @@ export default class Product extends Component {
     render(){
         return (
             <Switch>
-                <Route path="/admin/products/product/show" component={ProductShow} />
-                <Route path="/admin/products/product/edit" component={ProductEdit} />
-                <Route path="/admin/products/product/detail" component={ProductDetail} />
-                <Redirect to="/admin/products/product/show"/>
+                <Route path="/product/show" component={ProductShow} />
+                <Route path="/product/edit" component={ProductEdit} />
+                <Route path="/product/detail" component={ProductDetail} />
+                <Redirect to="/product/show"/>
             </Switch>
         )
     }

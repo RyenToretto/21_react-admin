@@ -1,22 +1,22 @@
 export const menuList = [
     {
         title: '首页', // 菜单标题名称
-        key: '/admin/home', // 对应的path
+        key: '/home', // 对应的path
         icon: 'home', // 图标名称
     },
     {
         title: '商品',
-        key: '/admin/products',
+        key: '/products',
         icon: 'appstore',
         children: [ // 子菜单列表
             {
                 title: '品类管理',
-                key: '/admin/products/category',
+                key: '/category',
                 icon: 'bars'
             },
             {
                 title: '商品管理',
-                key: '/admin/products/product',
+                key: '/product',
                 icon: 'tool'
             },
         ]
@@ -24,32 +24,32 @@ export const menuList = [
     
     {
         title: '用户管理',
-        key: '/admin/user',
+        key: '/user',
         icon: 'user'
     },
     {
         title: '权限管理',
-        key: '/admin/role',
+        key: '/role',
         icon: 'safety',
     },
     {
         title: '图形图表',
-        key: '/admin/charts',
+        key: '/charts',
         icon: 'area-chart',
         children: [
             {
                 title: '柱形图',
-                key: '/admin/charts/bar',
+                key: '/charts/bar',
                 icon: 'bar-chart'
             },
             {
                 title: '折线图',
-                key: '/admin/charts/line',
+                key: '/charts/line',
                 icon: 'line-chart'
             },
             {
                 title: '饼图',
-                key: '/admin/charts/pie',
+                key: '/charts/pie',
                 icon: 'pie-chart'
             },
         ]

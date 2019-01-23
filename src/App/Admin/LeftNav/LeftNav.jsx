@@ -51,18 +51,18 @@ class LeftNav extends Component {
     
     render(){
         let curKey = this.props.location.pathname;
-        let openKey = "/admin/home";
+        let openKey = "/home";
         const ret = getCurKey(curKey, menuList);
         if(ret && ret.preKey && ret.preKey.key){
             openKey = ret.preKey.key;
         }
         if(ret.key){
-            curKey = ret.key?ret.key.key:"/admin/home";
+            curKey = ret.key?ret.key.key:"/home";
         }
         
         return (
             <div className="left_nav">
-                <NavLink id="home_a" to="/admin/home">
+                <NavLink id="home_a" to="/home">
                     <img id="home_img" src={theLogo} alt="Logo"/>
                     <h2>后台管理系统</h2>
                 </NavLink>
