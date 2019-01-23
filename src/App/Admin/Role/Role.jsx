@@ -125,6 +125,11 @@ export default class Role extends PureComponent {
         const result = await requestRoleUpdate(curRole);
         if(result.status === 0){
             message.success("角色权限设置已更新");
+            const curUser = myLocalStorage.local("user_key");
+            if(curRole._id === curUser.role_id){
+                myLocalStorage.remove("user_key");
+                this.props.history.replace("/login");
+            }
         }else{
             message.error("角色权限设置失败，请稍后重试");
         }

@@ -5,6 +5,7 @@ import {requestAllUser, requestDeleteUser, requestAddUser, requestUpdateUser} fr
 import {formateTime} from '../../../tools/MyTools';
 
 import "./css/User.css";
+import myLocalStorage from "../../../tools/storeLocalStorage";
 
 export default class User extends PureComponent {
     constructor(props){
@@ -82,7 +83,7 @@ export default class User extends PureComponent {
             username  = result.user && result.user.username;
             allUser.push(result.user);
         }else if(isUpdateUser){
-            newUser._id=  this.userForm.userId;
+            newUser._id =  this.userForm.userId;
             result = await requestUpdateUser(newUser);
             successTips = "修改用户信息成功 ：";
             errorTips = "修改用户信息失败，请稍后重试";
@@ -94,7 +95,12 @@ export default class User extends PureComponent {
             message.success(successTips+username);
             this.setState({
                 allUser
-            })
+            });
+            const curUser = myLocalStorage.local("user_key");
+            if(newUser.role_id === curUser.role_id){
+                myLocalStorage.remove("user_key");
+                this.props.history.replace("/login");
+            }
         }else{
             message.error(errorTips)
         }
