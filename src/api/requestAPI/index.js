@@ -9,6 +9,7 @@ import jsonp from "jsonp";
 export function requestLogin(username, password){
     return ajax("/login", {username, password}, "POST");
 }
+
 // city 查询天气
 export function requestWeather(city){
     const url = `http://api.map.baidu.com/telematics/v3/weather?location=${city}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`;
@@ -96,4 +97,28 @@ export function requestRoleAdd(roleName) {
 export function requestRoleUpdate(role) {
     const url = "/manage/role/update";
     return ajax(url, role, "POST");
+}
+
+// 请求获取 所有用户的列表
+export function requestAllUser() {
+    const url = "/manage/user/list";
+    return ajax(url, "GET");
+}
+
+// 请求删除 一个用户
+export function requestDeleteUser(userId) {
+    const url = "/manage/user/delete";
+    return ajax(url, {userId},"POST");
+}
+
+// 请求创建 一个新用户
+export function requestAddUser({username, password, phone, email, role_id}) {
+    const url = "/manage/user/add";
+    return ajax(url, {username, password, phone, email, role_id},"POST");
+}
+
+// 请求创建 一个新用户
+export function requestUpdateUser({username, _id, phone, email, role_id}) {
+    const url = "/manage/user/update";
+    return ajax(url, {username, _id, phone, email, role_id},"POST");
 }

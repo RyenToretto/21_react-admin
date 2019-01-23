@@ -25,7 +25,35 @@
     font-size: 18px;
 }
 
-.user_card .ant-table-placeholder {
+.user_card .user_table tbody tr:hover td {    /* 鼠标悬浮 特效 */
+    background-color: #237597 !important;
+    transform: scale(1.1);
+    text-shadow: 1px 1px 10px #a69571;
+}
+
+.user_modal .ant-modal-close,    /* 右上角的 x */
+.user_modal .ant-modal-close-x {
+    margin: 0;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+}
+
+.user_card .ant-table-placeholder {    /* 无数据 特效 */
     color: #fff;
     background-color: #49618f;
+}
+
+.user_form .user_form_item label {
+    display: flex;
+    align-items: center;
+    padding-left: 48px;
+}
+
+.user_form .user_form_item label>span {
+    min-width: 60px;
+}
+
+.user_form_item {
+    width: 70%;
 }

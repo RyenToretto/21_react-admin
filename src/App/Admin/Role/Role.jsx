@@ -46,7 +46,9 @@ export default class Role extends PureComponent {
     };
     
     getRoleList = async ()=>{
+        this.setState({isLoading: true});
         const result = await requestRoleList();
+        this.setState({isLoading: false});
         if(result.status === 0){
             const dataSource = result.data.map(each=>({
                 _id: each._id,
@@ -141,16 +143,20 @@ export default class Role extends PureComponent {
         const RoleCardTitle = (
             <h3 className="role_box_title">
                 <Button type="primary" onClick={()=>{this.setState({isRoleAdd: true})}}>创建角色</Button>
-                <Button type="primary" onClick={()=>{
+                <Button
+                    type="primary"
+                    disabled={!(!!curRole._id)}
+                    onClick={()=>{
                     this.newConfig = [];
-                    curRole.menus.forEach(each=>{
-                        if(each==="/products" || each==="/charts"){
-                        
-                        }else{
-                            this.newConfig.push(each);
-                        }
-                    });
-                    console.log(this.newConfig);
+                    if(curRole.menus){
+                        curRole.menus.forEach(each=>{
+                            if(each==="/products" || each==="/charts"){
+            
+                            }else{
+                                this.newConfig.push(each);
+                            }
+                        });
+                    }
                     this.setState({isRoleConfig: true, hadAuthPath: this.newConfig});
                 }}>
                     设置角色权限
