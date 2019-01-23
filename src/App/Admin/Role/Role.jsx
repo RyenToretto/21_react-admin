@@ -101,9 +101,24 @@ export default class Role extends PureComponent {
         this.setState({isRoleConfig: false});
     
         let {curRole} = this.state;
-        curRole.menus = this.newConfig;
         curRole.auth_name = myLocalStorage.local("user_key").username || 'admin';
         curRole.auth_time = Date.now();
+        curRole.menus = [];
+        this.newConfig.forEach(each=>{
+            if(each==="/products"){
+                curRole.menus.push("/category");
+                curRole.menus.push("/product");
+            }else if(each==="/category" || each==="/product"){
+                curRole.menus.push("/products");
+            }else if(each==="/charts"){
+                curRole.menus.push("/charts/bar");
+                curRole.menus.push("/charts/line");
+                curRole.menus.push("/charts/pie");
+            }else if(each==="/charts/bar" || each==="/charts/line" || each==="/charts/pie"){
+                curRole.menus.push("/charts");
+            }
+            curRole.menus.push(each);
+        });
         
         const result = await requestRoleUpdate(curRole);
         if(result.status === 0){
@@ -127,8 +142,16 @@ export default class Role extends PureComponent {
             <h3 className="role_box_title">
                 <Button type="primary" onClick={()=>{this.setState({isRoleAdd: true})}}>创建角色</Button>
                 <Button type="primary" onClick={()=>{
-                    this.newConfig = curRole.menus;
-                    this.setState({isRoleConfig: true, hadAuthPath: curRole.menus});
+                    this.newConfig = [];
+                    curRole.menus.forEach(each=>{
+                        if(each==="/products" || each==="/charts"){
+                        
+                        }else{
+                            this.newConfig.push(each);
+                        }
+                    });
+                    console.log(this.newConfig);
+                    this.setState({isRoleConfig: true, hadAuthPath: this.newConfig});
                 }}>
                     设置角色权限
                 </Button>
