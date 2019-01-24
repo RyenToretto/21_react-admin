@@ -1,0 +1,11 @@
+.home_card {
+    width: 95%;
+    height: 650px;
+    margin: 0 auto;
+    margin-top: 40px;
+    background-color: #849277;
+}
+
+.home_card .home_echarts {
+    height: 550px !important;
+}
